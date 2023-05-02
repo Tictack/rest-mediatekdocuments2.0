@@ -39,8 +39,6 @@ class AccessBDD {
                     return $this->selectAllDvd();
                 case "revue" :
                     return $this->selectAllRevues();
-                case "exemplaire" :
-                    return $this->selectAllExemplairesRevue();
                 case "abonnements" :
                     return $this->selectAllAbonnements();
                 case "utilisateur" :
@@ -135,7 +133,10 @@ class AccessBDD {
         $req .= "order by titre ";
         return $this->conn->query($req);
     }
-    
+    /**
+     * récupération de toutes les lignes de la table Abonnement et les tables associées
+     * @return lignes de la requete
+     */
     public function selectAllAbonnements(){
         $req = "Select a.id, c.dateCommande, c.montant, a.dateFinAbonnement, a.idRevue, d.titre ";
         $req .= "from abonnement a join commande c on c.id=a.id ";
@@ -143,13 +144,21 @@ class AccessBDD {
         $req .= "order by c.dateCommande DESC";
         return $this->conn->query($req);
     }
-    
+    /**
+     * récupération de toutes les lignes de la table Utilisateur et les tables associées
+     * @return lignes de la requete
+     */
     public function selectAllUtilisateurs(){
         $req = "Select u.id, u.login, u.password, u.idService, s.type ";
         $req .= "from utilisateur u join service s on u.idService=s.id";
         return $this->conn->query($req);
     }
     
+    /**
+     * récupération de tous les abonnement d'une revue
+     * @param string $id id de la revue
+     * @return lignes de la requete
+     */
     public function selectAllAbonnement($id){
        $param = array(
             "id" => $id
@@ -222,6 +231,12 @@ class AccessBDD {
         }
     }
 
+    /**
+     * suppresion d'une ou plusieurs lignes dans CommandeDocument puis dans Commande
+     * @param string $table nom de la table commandedocument
+     * @param array $champs nom et valeur de chaque champs
+     * @return true si la suppression a fonctionné
+     */
     public function deleteCommandeDocument($table, $champs) {
         $params = array(
             "id" => $champs["Id"],
@@ -252,6 +267,13 @@ class AccessBDD {
         return $result1 && $result2;
     }
     
+    
+    /**
+     * suppresion d'une ou plusieurs lignes dans Abonnement puis dans Commande
+     * @param string $table nom de la table commandedocument
+     * @param array $champs nom et valeur de chaque champs
+     * @return true si la suppression a fonctionné
+     */
     public function deleteAbonnement($table, $champs) {
         $params = array(
             "id" => $champs["Id"],
@@ -316,6 +338,12 @@ class AccessBDD {
         }
     }
 
+    /**
+     * ajout d'une ligne dans Commande puis CommandeDocument
+     * @param string $table nom de la table CommandeDocument
+     * @param array $champs nom et valeur de chaque champs de la ligne
+     * @return true si l'ajout a fonctionné
+     */
     public function insertOneCommandeDocument($table, $champs) {
         // insertion commande
         $param = array(
@@ -365,6 +393,12 @@ class AccessBDD {
         return $result1 && $result2;
     }
     
+    /**
+     * ajout d'une ligne dans Commande puis Abonnement
+     * @param string $table nom de la table Abonnement
+     * @param array $champs nom et valeur de chaque champs de la ligne
+     * @return true si l'ajout a fonctionné
+     */
     public function insertOneAbonnement($table, $champs) {
         // insertion commande
         $param = array(
@@ -417,7 +451,7 @@ class AccessBDD {
      * modification d'une ligne dans une table
      * @param string $table nom de la table
      * @param string $id id de la ligne à modifier
-     * @param array $param nom et valeur de chaque champs de la ligne
+     * @param array $champs nom et valeur de chaque champs de la ligne
      * @return true si la modification a fonctionné
      */
     public function updateOne($table, $id, $champs) {
@@ -442,6 +476,13 @@ class AccessBDD {
         }
     }
 
+    /**
+     * modification d'une ligne dans CommandeDocument
+     * @param string $table nom de la table CommandeDocument
+     * @param string $id id de la ligne à modifier
+     * @param array $champs nom et valeur de chaque champs de la ligne
+     * @return true si la modification a fonctionné
+     */
     public function updateOneCommandeDocument($table, $id, $champs) {
         $params = array(
             "id" => $champs["Id"],
