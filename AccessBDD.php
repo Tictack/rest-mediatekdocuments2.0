@@ -7,10 +7,10 @@ include_once("ConnexionPDO.php");
  */
 class AccessBDD {
 
-    public $login = "root";
-    public $mdp = "";
-    public $bd = "mediatek86";
-    public $serveur = "localhost";
+    public $login = "u512605658_admin";
+    public $mdp = "Mediatek86";
+    public $bd = "u512605658_mediatek86";
+    public $serveur = "127.0.0.1";
     public $port = "3306";
     public $conn = null;
 
